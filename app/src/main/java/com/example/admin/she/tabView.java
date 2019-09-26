@@ -142,13 +142,13 @@ public class tabView extends AppCompatActivity {
 
             switch (position){
                 case 0:
-                    TabOne tabOne = new TabOne();
+                    EmergencyTab tabOne = new EmergencyTab();
                     return tabOne;
                 case 1:
-                    TabTwo tabTwo = new TabTwo();
+                    MapsTab tabTwo = new MapsTab();
                     return tabTwo;
                 case 2:
-                    TabThree tabThree = new TabThree();
+                    ProfileTab tabThree = new ProfileTab();
                     return tabThree;
                 default:
                     return null;
