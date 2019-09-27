@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class login4 extends AppCompatActivity {
 
     private TextView textView;
@@ -17,7 +15,7 @@ public class login4 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login4);
+        setContentView(R.layout.activity_login);
 
         textView = (TextView) findViewById(R.id.textView50);
         button = (Button) findViewById(R.id.button4);
@@ -39,7 +37,7 @@ public class login4 extends AppCompatActivity {
     }
 
     public void openlogin(){
-        Intent intent = new Intent(this , Login.class);
+        Intent intent = new Intent(this , RegisterationSetup1Activity.class);
         startActivity(intent);
     }
 

@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class MapsTab extends Fragment{
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.tab_maps, container , false);
         return view;
+
+
     }
 
 }
