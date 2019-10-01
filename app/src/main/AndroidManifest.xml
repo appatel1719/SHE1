@@ -30,7 +30,7 @@
         </activity>
         <activity android:name=".RegisterationSetup2Activity" />
         <activity android:name=".RegisterationSetup3Activity" />
-        <activity android:name=".login4" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterationSetup1Activity" />
         <activity android:name=".login0" />
         <activity

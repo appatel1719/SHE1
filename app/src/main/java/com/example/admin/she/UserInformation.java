@@ -1,5 +1,9 @@
 package com.example.admin.she;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.EditText;
+
 public class UserInformation {
 
     static String name;
@@ -26,6 +30,24 @@ public class UserInformation {
         this.age = age;
         this.email = email;
         this.contactNumber = contactNumber;
+    }
+
+    public void aveToPreferences(Context context){
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_details",0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("user_name",UserInformation.name);
+        editor.putString("password",UserInformation.password);
+        editor.putString("user_id",UserInformation.username);
+        editor.putInt("user_age",UserInformation.age);
+        editor.putString("address",UserInformation.address);
+        editor.putString("user_email",UserInformation.email);
+        editor.putString("contact_num",UserInformation.contactNumber);
+
+        editor.commit();
+
+
     }
 
     public void setName(String name) {

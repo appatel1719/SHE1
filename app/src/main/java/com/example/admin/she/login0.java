@@ -36,7 +36,7 @@ public class login0 extends AppCompatActivity {
     }
 
     public void openlogin4(){
-        Intent intent = new Intent(this , login4.class);
+        Intent intent = new Intent(this , LoginActivity.class);
         startActivity(intent);
     }
 

@@ -1,13 +1,16 @@
 package com.example.admin.she;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -23,56 +26,58 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class RegisterationSetup3Activity extends AppCompatActivity {
-
-    private Button confirmButton;
+public class LoginActivity extends AppCompatActivity {
 
     EditText usernameEditText;
     EditText passwordEditText;
 
+    Context mContext;
+
+    private TextView textView;
+    private Button loginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activtiy_registeration_setup3);
+        setContentView(R.layout.activity_login);
 
-        confirmButton = findViewById(R.id.button_registerationConfirm);
+        usernameEditText = (EditText)findViewById(R.id.login_editText_username);
+        passwordEditText = (EditText)findViewById(R.id.login_editText_password);
 
+        textView = (TextView) findViewById(R.id.textView50);
+        loginButton = (Button) findViewById(R.id.button4);
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                usernameEditText = findViewById(R.id.editText_username);
-                passwordEditText = findViewById(R.id.editText_registeration_password);
-
-                UserInformation.username = usernameEditText.getText().toString();
-                UserInformation.password = passwordEditText.getText().toString();
-
-                sendRegisterationRequest();
-
+                 Intent intent = new Intent(getApplicationContext(),RegisterationSetup1Activity.class);
+                 startActivity(intent);
             }
         });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performLogin();
+            }
+        });
+
+        mContext = LoginActivity.this;
+
     }
 
-    public void sendRegisterationRequest(){
+    public void sendLoginRequest(){
 
         JSONObject postDictionary = new JSONObject();
 
         try{
-            postDictionary.put("submit",true);
-            postDictionary.put("user_name",UserInformation.name);
             postDictionary.put("user_id",UserInformation.username);
             postDictionary.put("password",UserInformation.password);
-            postDictionary.put("user_age",UserInformation.age);
-            postDictionary.put("address",UserInformation.address);
-            postDictionary.put("user_email",UserInformation.email);
-            postDictionary.put("contact_num",UserInformation.contactNumber);
-
         }catch (JSONException exception){
             exception.printStackTrace();
         }
 
-        class SendDataToServer extends AsyncTask <String,String,String> {
+        class SendDataToServer extends AsyncTask<String,String,String> {
 
             @Override
             protected String doInBackground(String... strings) {
@@ -84,7 +89,7 @@ public class RegisterationSetup3Activity extends AppCompatActivity {
                 String boundary = "*****";
                 Log.d("jsonData",JsonDATA);
                 try {
-                    URL url = new URL("http://192.168.43.235:8080/SHE/she3/profile.php");
+                    URL url = new URL("http://192.168.43.235:8080/she/she3/login.php");
                     urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setDoOutput(true);
                     // is output buffer writter
@@ -117,16 +122,44 @@ public class RegisterationSetup3Activity extends AppCompatActivity {
                     }
                     JsonResponse = buffer.toString();
                     //response data
-                    Log.i("json_dataSend",JsonResponse);
-                    return JsonResponse;
-//                    try {
-//                        //send to post execute
-//                        return JsonResponse;
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-                    //return null;
+                    Log.i("json_response",JsonResponse);
 
+                    try{
+                        JSONObject jsonObject = new JSONObject(JsonResponse);
+
+                        boolean success = jsonObject.getBoolean("loginSuccess");
+
+                        if(success){
+
+                            JSONObject detailsJSON = jsonObject.getJSONObject("details");
+
+
+                            UserInformation.username = detailsJSON.getString("user_id");
+                            UserInformation.name = detailsJSON.getString("user_name");
+                            UserInformation.password = detailsJSON.getString("password");
+                            UserInformation.email = detailsJSON.getString("user_email");
+                            UserInformation.contactNumber = detailsJSON.getString("contact_num");
+                            UserInformation.age = detailsJSON.getInt("user_age");
+                            UserInformation.address = detailsJSON.getString("address");
+
+                            Intent intent = new Intent(getApplicationContext(), tabView.class);
+                            startActivity(intent);
+
+
+                        }else{
+
+
+                            //CAUTION: GENERATES ERROR WHEN CALLED. BECAUSE, NOT BEING CALLED FROM THE MAIN UI THREAD. THIS IS WORKER THREAD
+                            Toast.makeText(mContext,"Cannot Login. Incorrect Username or Password!",Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }catch (JSONException exception){
+                        Log.d("json_dataSend",exception.getLocalizedMessage());
+                    }
+
+
+                    return JsonResponse;
 
 
                 } catch (IOException e) {
@@ -168,6 +201,16 @@ public class RegisterationSetup3Activity extends AppCompatActivity {
         }
 
 
+
+    }
+
+
+    public void performLogin(){
+
+        UserInformation.username = usernameEditText.getText().toString();
+        UserInformation.password = passwordEditText.getText().toString();
+
+        sendLoginRequest();
 
     }
 
