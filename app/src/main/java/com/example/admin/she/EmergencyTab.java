@@ -24,30 +24,42 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import ir.sohreco.circularpulsingbutton.CircularPulsingButton;
 
 public class EmergencyTab extends Fragment{
+
     String[] name  = new String[5];
     String[] number = new String[5];
     final int SEND_SMS_PERMISSION_REQUEST_CODE = 1;
-    CircularPulsingButton btn;
+    CircularPulsingButton emergencyButton;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_emergency, container, false);
-        btn = (CircularPulsingButton)view.findViewById(R.id.btn_alert_emergency);
-        getJSON("http://192.168.43.235:8080/SHE/she3/fetchcontact.php");
+        emergencyButton = (CircularPulsingButton)view.findViewById(R.id.btn_alert_emergency);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        //sendUserIDToServer();
+        getJSONofContactInfo("http://192.168.43.235:8080/SHE/she3/fetchcontact.php?user_id="+UserInformation.username);
+
+        emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 for (int i = 0; i < name.length; i++) {
+
                     String Relation, ph_number;
                     Relation = name[i];
                     ph_number = number[i];
@@ -60,7 +72,7 @@ public class EmergencyTab extends Fragment{
 
                     } else if(ph_number!=null) {
 
-                        Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Cannot Send SMS. Permission Denied", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -72,7 +84,7 @@ public class EmergencyTab extends Fragment{
 
     }
 
-    private void getJSON(final String urlWebService) {
+    private void getJSONofContactInfo(final String urlWebService) {
         class GetJSON extends AsyncTask <Void, Void, String> {
             @Override
             protected void onPreExecute() {
@@ -151,6 +163,7 @@ public class EmergencyTab extends Fragment{
         int check = ContextCompat.checkSelfPermission(getContext(),permission);
         return (check == PackageManager.PERMISSION_GRANTED);
     }
+
 }
 
 
