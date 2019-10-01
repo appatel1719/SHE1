@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".login4">
+    tools:context=".LoginActivity">
 
 
     <TextView
@@ -27,7 +27,7 @@
         app:layout_constraintVertical_bias="0.179" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/login_editText_username"
         android:layout_width="307dp"
         android:layout_height="53dp"
         android:layout_marginBottom="8dp"
@@ -48,42 +48,40 @@
         app:layout_constraintVertical_bias="0.032" />
 
     <EditText
-        android:id="@+id/editText0"
+        android:id="@+id/login_editText_password"
         android:layout_width="307dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/enter"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
         android:paddingLeft="15dp"
-        android:hint="Password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.426"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/login_editText_username"
+        app:layout_constraintVertical_bias="0.062" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="157dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="212dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="212dp"
         android:background="@drawable/button"
         android:text="Login"
         android:textColor="#FFFFFF"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText0"
+        app:layout_constraintTop_toBottomOf="@+id/login_editText_password"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
