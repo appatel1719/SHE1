@@ -50,7 +50,8 @@ public class EmergencyTab extends Fragment{
         emergencyButton = (CircularPulsingButton)view.findViewById(R.id.btn_alert_emergency);
 
         //sendUserIDToServer();
-        getJSONofContactInfo("http://192.168.43.235:8080/SHE/she3/fetchcontact.php?user_id="+UserInformation.username);
+        getJSONofContactInfo("http://192.168.8.194:8080/SHE/she3/fetchcontact.php?user_id="+UserInformation.username);
+
 
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +77,11 @@ public class EmergencyTab extends Fragment{
                     }
 
                 }
+
+                sendEmergencyRequest("http://192.168.8.194:8080/SHE/she3/emergency.php?user_id=" + UserInformation.username + "&time_stamp=02102019_2100" + "&latitude=" + UserPosition.currentLatitude + "&longitude=" + UserPosition.currentLongitude + "&activity=Running" + "status=1" + "&submit=true");
+
+                Toast.makeText(getContext(),"Sending Emergency Request...",Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -156,6 +162,57 @@ public class EmergencyTab extends Fragment{
     }
 
 
+    void sendEmergencyRequest(final String urlWebService){
+
+        class SendEmergencyRequest extends AsyncTask <Void, Void, String> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+
+            }
+
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+
+
+                try {
+                    URL url = new URL(urlWebService);
+
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                    StringBuilder sb = new StringBuilder();
+
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String json;
+
+                    while ((json = bufferedReader.readLine()) != null) {
+                        //Log.d("---------------------- " , json);
+                        sb.append(json + "\n");
+                    }
+
+                    return sb.toString().trim();
+                } catch (Exception e) {
+                    return null;
+                }
+
+            }
+        }
+
+        SendEmergencyRequest sendEmergencyRequest = new SendEmergencyRequest();
+        sendEmergencyRequest.execute();
+
+
+    }
+
 
 
 
@@ -163,6 +220,8 @@ public class EmergencyTab extends Fragment{
         int check = ContextCompat.checkSelfPermission(getContext(),permission);
         return (check == PackageManager.PERMISSION_GRANTED);
     }
+
+
 
 }
 

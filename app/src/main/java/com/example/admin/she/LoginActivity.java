@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 String boundary = "*****";
                 Log.d("jsonData",JsonDATA);
                 try {
-                    URL url = new URL("http://192.168.43.235:8080/she/she3/login.php");
+                    URL url = new URL("http://192.168.8.194:8080/she/she3/login.php");
                     urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setDoOutput(true);
                     // is output buffer writter
