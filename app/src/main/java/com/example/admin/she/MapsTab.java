@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,7 +31,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.List;
 import java.util.Map;
 
 public class MapsTab extends Fragment implements OnMapReadyCallback {
@@ -43,6 +48,10 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
     public LocationManager locationManager;
     public Criteria criteria;
     public String bestProvider;
+
+    LocationManager mLocationManager;
+    Location mLocation;
+
 
 
     @Nullable
@@ -63,7 +72,7 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
         if(mapFragment != null){
             Log.d("debug","Error occured before this");
             mapFragment.getMapAsync(this);
-            Toast.makeText(getContext(),"Loading maps succesfully.",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"Loading maps succesfully.",Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(getContext(),"Map could not be loaded",Toast.LENGTH_SHORT).show();
         }
@@ -143,7 +152,7 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-        LatLng position = new LatLng(latitude, longitude);
+        LatLng position = new LatLng(23.0225, 72.5714);
         mMap.addMarker(new MarkerOptions().position(position).title("Marker at current location."));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
@@ -158,30 +167,26 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
         if (isLocationEnabled(getContext())) {
             locationManager = (LocationManager)  getActivity().getSystemService(Context.LOCATION_SERVICE);
             criteria = new Criteria();
+
             bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
-            Location location;
-            //You can still do this if you like, you might get lucky:
+
             if (ContextCompat.checkSelfPermission( getContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
             {
-                ActivityCompat.requestPermissions(
-                        getActivity(),
-                        new String [] { android.Manifest.permission.ACCESS_COARSE_LOCATION },
-                        1
-                );
-                location = null;
+               Toast.makeText(getContext(),"Permission not granted",Toast.LENGTH_SHORT).show();
             }else{
-                location = locationManager.getLastKnownLocation(bestProvider);
+                mLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
 
-            if (location != null) {
+
+            if (mLocation != null) {
                 Log.e("TAG", "GPS is on");
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
+                latitude = mLocation.getLatitude();
+                longitude = mLocation.getLongitude();
                 Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getContext(),"Location is NULL",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Location is still NULL", Toast.LENGTH_SHORT).show();
             }
         }
         else
@@ -189,4 +194,6 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
             Toast.makeText(getContext(),"Either Location Services not enabled on your Android device OR permissions not granted",Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }
