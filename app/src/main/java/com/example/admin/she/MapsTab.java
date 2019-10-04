@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,16 +12,38 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-public class MapsTab extends Fragment {
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Map;
+
+public class MapsTab extends Fragment implements OnMapReadyCallback {
 
 
-    double longitude;
-    double latitude;
+    private GoogleMap mMap;
+
+
+    public double latitude;
+    public double longitude;
+    public LocationManager locationManager;
+    public Criteria criteria;
+    public String bestProvider;
+
 
     @Nullable
     @Override
@@ -34,6 +57,16 @@ public class MapsTab extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_map);
+
+        if(mapFragment != null){
+            Log.d("debug","Error occured before this");
+            mapFragment.getMapAsync(this);
+            Toast.makeText(getContext(),"Loading maps succesfully.",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getContext(),"Map could not be loaded",Toast.LENGTH_SHORT).show();
+        }
 
 
         LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -53,54 +86,107 @@ public class MapsTab extends Fragment {
             return;
         }
 
+        getLocation();
 
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        longitude = location.getLongitude();
-        latitude = location.getLatitude();
+//
+//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        longitude = location.getLongitude();
+//        latitude = location.getLatitude();
+//
+//        if(location == null){
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//            builder.setTitle("Location NULL");
+//            builder.setMessage("Location could not be determined.");
+//            builder.show();
+//
+//            Toast.makeText(getContext(),"Location could not be determined.",Toast.LENGTH_SHORT).show();
+//
+//
+//        }
+//        else{
+//
+//             final LocationListener locationListener = new LocationListener() {
+//                @Override
+//                public void onLocationChanged(Location location) {
+//                    longitude = location.getLongitude();
+//                    latitude = location.getLatitude();
+//                    UserPosition.currentLatitude = latitude;
+//                    UserPosition.currentLongitude = longitude;
+//                }
+//
+//                @Override
+//                public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//                }
+//
+//                @Override
+//                public void onProviderEnabled(String provider) {
+//
+//                }
+//
+//                @Override
+//                public void onProviderDisabled(String provider) {
+//
+//                }
+//            };
+//
+//
+//            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+//
+//
+//        }
 
-        if(location == null){
+    }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Location NULL");
-            builder.setMessage("Location could not be determined.");
-            builder.show();
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
 
-            Toast.makeText(getContext(),"Location could not be determined.",Toast.LENGTH_SHORT).show();
+        mMap = googleMap;
+        LatLng position = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(position).title("Marker at current location."));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
+    }
+    public static boolean isLocationEnabled(Context context)
+    {
+        //...............
+        return true;
+    }
 
+    protected void getLocation() {
+        if (isLocationEnabled(getContext())) {
+            locationManager = (LocationManager)  getActivity().getSystemService(Context.LOCATION_SERVICE);
+            criteria = new Criteria();
+            bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
+            Location location;
+            //You can still do this if you like, you might get lucky:
+            if (ContextCompat.checkSelfPermission( getContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+            {
+                ActivityCompat.requestPermissions(
+                        getActivity(),
+                        new String [] { android.Manifest.permission.ACCESS_COARSE_LOCATION },
+                        1
+                );
+                location = null;
+            }else{
+                location = locationManager.getLastKnownLocation(bestProvider);
+            }
+
+            if (location != null) {
+                Log.e("TAG", "GPS is on");
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                Toast.makeText(getContext(), "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getContext(),"Location is NULL",Toast.LENGTH_SHORT).show();
+            }
         }
-        else{
-
-             final LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    longitude = location.getLongitude();
-                    latitude = location.getLatitude();
-                    UserPosition.currentLatitude = latitude;
-                    UserPosition.currentLongitude = longitude;
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            };
-
-
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
-
-
+        else
+        {
+            Toast.makeText(getContext(),"Either Location Services not enabled on your Android device OR permissions not granted",Toast.LENGTH_SHORT).show();
         }
-
     }
 }

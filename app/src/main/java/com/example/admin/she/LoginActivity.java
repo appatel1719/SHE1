@@ -156,6 +156,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     }catch (JSONException exception){
                         Log.d("json_dataSend",exception.getLocalizedMessage());
+
+                        Toast.makeText(mContext, "Cannot Sign-in at the moment.", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -211,6 +213,9 @@ public class LoginActivity extends AppCompatActivity {
         UserInformation.password = passwordEditText.getText().toString();
 
         sendLoginRequest();
+
+        Intent intent = new Intent(getApplicationContext(), tabView.class);
+        startActivity(intent);
 
     }
 
