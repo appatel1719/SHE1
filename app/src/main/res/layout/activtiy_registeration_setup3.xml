@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".login3">
+    tools:context=".RegisterationSetup3Activity">
 
 
     <Button
@@ -43,7 +43,7 @@
         app:layout_constraintVertical_bias="0.114" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editText_username"
         android:layout_width="265dp"
         android:layout_height="56dp"
         android:layout_marginBottom="8dp"
@@ -54,7 +54,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:paddingLeft="15dp"
-        android:text="UserName"
+        android:hint="Username"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,7 @@
         app:layout_constraintVertical_bias="0.236" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/editText_registeration_password"
         android:layout_width="265dp"
         android:layout_height="56dp"
         android:layout_marginBottom="8dp"
@@ -75,7 +75,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:paddingLeft="15dp"
-        android:text="********"
+        android:hint="Password"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,13 +99,13 @@
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.585" />
+        app:layout_constraintVertical_bias="0.571" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/button_registerationConfirm"
         android:layout_width="206dp"
         android:layout_height="47dp"
         android:layout_marginBottom="8dp"
@@ -118,9 +118,27 @@
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.349"
+        app:layout_constraintHorizontal_bias="0.32"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Confirm Password"
+        android:textColor="#224976"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.237"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.48" />
 
 </android.support.constraint.ConstraintLayout>

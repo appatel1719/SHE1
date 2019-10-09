@@ -5,43 +5,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-public class login0 extends AppCompatActivity {
+public class RegisterationSetup2Activity extends AppCompatActivity {
 
     private Button button;
-    private TextView textView;
+    private Button button1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_registeration_setup2);
 
-        button = (Button) findViewById(R.id.button);
-        textView = (TextView) findViewById(R.id.textView11);
+        button = (Button) findViewById(R.id.button5);
+        button1 = (Button) findViewById(R.id.button3);
 
         button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openlogin4();
-            }
-        });
-
-        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openlogin();
             }
         });
-    }
 
-    public void openlogin4(){
-        Intent intent = new Intent(this , LoginActivity.class);
-        startActivity(intent);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openlogin3();
+            }
+        });
     }
 
     public void openlogin(){
         Intent intent = new Intent(this, RegisterationSetup1Activity.class);
+        startActivity(intent);
+    }
+
+    public void openlogin3(){
+        Intent intent = new Intent(this , RegisterationSetup3Activity.class);
         startActivity(intent);
     }
 }
