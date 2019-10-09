@@ -93,9 +93,10 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
+        }else{
+            getLocation();
         }
 
-        getLocation();
 
 //
 //        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -165,6 +166,7 @@ public class MapsTab extends Fragment implements OnMapReadyCallback {
 
     protected void getLocation() {
         if (isLocationEnabled(getContext())) {
+
             locationManager = (LocationManager)  getActivity().getSystemService(Context.LOCATION_SERVICE);
             criteria = new Criteria();
 
